@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    Rigidbody2D rb;
+    Collider2D collider;
+    float force = 750;
+    Vector2 playerInput;
     public enum FacingDirection
     {
         left, right
@@ -10,7 +14,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody2D>();
+        collider = GetComponent<Collider2D>();
     }
 
     // Update is called once per frame
@@ -19,26 +24,43 @@ public class PlayerController : MonoBehaviour
         // The input from the player needs to be determined and
         // then passed in the to the MovementUpdate which should
         // manage the actual movement of the character.
-        Vector2 playerInput = new Vector2();
-        MovementUpdate(playerInput);
+        playerInput.x = Input.GetAxis("Horizontal");
     }
 
+    private void FixedUpdate()
+    {
+        MovementUpdate(playerInput);
+    }
     private void MovementUpdate(Vector2 playerInput)
     {
-
+        rb.AddForce(playerInput * force * Time.deltaTime);
     }
 
     public bool IsWalking()
     {
-        return false;
+        if (rb.velocity.magnitude > 0.01f && IsGrounded())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     public bool IsGrounded()
     {
-        return false;
+        return true;
     }
 
     public FacingDirection GetFacingDirection()
     {
-        return FacingDirection.left;
+        if (rb.velocity.x < 0)
+        {
+            return FacingDirection.left;
+        }
+        else
+        {
+            return FacingDirection.right;
+        }
     }
 }
