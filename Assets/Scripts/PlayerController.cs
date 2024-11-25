@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         collider = GetComponent<Collider2D>();
+        rb.freezeRotation = true;
     }
 
     // Update is called once per frame
@@ -49,7 +50,14 @@ public class PlayerController : MonoBehaviour
     }
     public bool IsGrounded()
     {
-        return true;
+        if (rb.velocity.y > 0.01f || rb.velocity.y < -0.01f)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     public FacingDirection GetFacingDirection()
