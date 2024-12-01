@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     Collider2D collider;
     float force = 750;
     Vector2 playerInput;
-    public float apexHeight = 3000;
+    public float apexHeight = 30000;
     public float apexTime = 1.5f;
     bool jumping;
     float jumpTime;
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
             jumping = true;
             jumpTime = 0;
         }
-        if (jumping)
+        if (jumping && jumpTime < apexTime)
         {
             jumpTime += Time.deltaTime;
             rb.AddForce(Vector2.up * Time.deltaTime * apexHeight / apexTime);
@@ -53,10 +53,6 @@ public class PlayerController : MonoBehaviour
         else
         {
             rb.AddForce(Physics2D.gravity);
-        }
-        if (jumpTime > apexTime)
-        {
-            jumping = false;
         }
     }
 
