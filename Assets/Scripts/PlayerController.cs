@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -6,6 +7,10 @@ public class PlayerController : MonoBehaviour
     Collider2D collider;
     float force = 750;
     Vector2 playerInput;
+    public float apexHeight;
+    public float apexTime;
+    bool jumping;
+    float jumpTime;
     public enum FacingDirection
     {
         left, right
@@ -35,6 +40,20 @@ public class PlayerController : MonoBehaviour
     private void MovementUpdate(Vector2 playerInput)
     {
         rb.AddForce(playerInput * force * Time.deltaTime);
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        {
+            jumping = true;
+            jumpTime = 0;
+        }
+        if (jumping)
+        {
+            jumpTime += Time.deltaTime;
+            rb.AddForce(Vector2.up * Time.deltaTime * apexHeight / apexTime);
+        }
+        if (jumpTime > apexTime)
+        {
+            jumping = false;
+        }
     }
 
     public bool IsWalking()
