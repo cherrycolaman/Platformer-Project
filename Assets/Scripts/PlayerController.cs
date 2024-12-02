@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     float force = 750;
     Vector2 playerInput;
     public float jumpForce = 8;
-    public float terminalSpeed = 5;
+    public float terminalSpeed = 2;
     public enum FacingDirection
     {
         left, right
@@ -42,7 +42,14 @@ public class PlayerController : MonoBehaviour
     private void MovementUpdate(Vector2 playerInput)
     {
         rb.AddForce(playerInput * force * Time.deltaTime);
-        rb.velocity = Vector2.ClampMagnitude(rb.velocity, terminalSpeed);
+        if(rb.velocity.y < 0)
+        {
+            rb.drag = terminalSpeed;
+        }
+        else
+        {
+            rb.drag = 0;
+        }
     }
 
     public bool IsWalking()
