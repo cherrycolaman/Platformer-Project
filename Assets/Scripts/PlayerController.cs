@@ -7,10 +7,7 @@ public class PlayerController : MonoBehaviour
     Collider2D collider;
     float force = 750;
     Vector2 playerInput;
-    public float apexHeight = 30000;
-    public float apexTime = 1.5f;
-    bool jumping;
-    float jumpTime;
+    float jumpForce = 8;
     public enum FacingDirection
     {
         left, right
@@ -31,6 +28,10 @@ public class PlayerController : MonoBehaviour
         // then passed in the to the MovementUpdate which should
         // manage the actual movement of the character.
         playerInput.x = Input.GetAxis("Horizontal");
+        if(Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        }
     }
 
     private void FixedUpdate()
@@ -40,20 +41,6 @@ public class PlayerController : MonoBehaviour
     private void MovementUpdate(Vector2 playerInput)
     {
         rb.AddForce(playerInput * force * Time.deltaTime);
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
-        {
-            jumping = true;
-            jumpTime = 0;
-        }
-        if (jumping && jumpTime < apexTime)
-        {
-            jumpTime += Time.deltaTime;
-            rb.AddForce(Vector2.up * Time.deltaTime * apexHeight / apexTime);
-        }
-        else
-        {
-            rb.AddForce(Physics2D.gravity);
-        }
     }
 
     public bool IsWalking()
