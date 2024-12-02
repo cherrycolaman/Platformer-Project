@@ -7,7 +7,8 @@ public class PlayerController : MonoBehaviour
     Collider2D collider;
     float force = 750;
     Vector2 playerInput;
-    float jumpForce = 8;
+    public float jumpForce = 8;
+    public float terminalSpeed = 5;
     public enum FacingDirection
     {
         left, right
@@ -41,6 +42,7 @@ public class PlayerController : MonoBehaviour
     private void MovementUpdate(Vector2 playerInput)
     {
         rb.AddForce(playerInput * force * Time.deltaTime);
+        rb.velocity = Vector2.ClampMagnitude(rb.velocity, terminalSpeed);
     }
 
     public bool IsWalking()
