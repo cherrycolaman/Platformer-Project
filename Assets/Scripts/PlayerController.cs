@@ -8,7 +8,9 @@ public class PlayerController : MonoBehaviour
     float force = 750;
     Vector2 playerInput;
     public float jumpForce = 8;
-    public float terminalSpeed = 2;
+    public float terminalSpeed = 0;
+    public float coyoteTime = 0.3f;
+    float timer;
     public enum FacingDirection
     {
         left, right
@@ -32,6 +34,22 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        }
+        if (IsGrounded())
+        {
+            timer = 0;
+        }
+        else
+        {
+            timer += Time.deltaTime;
+            if (rb.velocity.y < 0 && timer < coyoteTime && timer > 0)
+            {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                    timer = 0;
+                }
+            }
         }
     }
 
